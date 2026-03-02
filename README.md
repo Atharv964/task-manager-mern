@@ -117,6 +117,69 @@ npm start dev
 JWT Token
 ```
 
+## 👥 User-Based Role System
+
+This application implements a role-based access control system.
+
+Each user has a ```role``` field in the database:
+
+```user ```(default)
+
+```admin```
+
+### Normal User
+
+Can create tasks
+Can view only their own tasks
+Can update their own tasks
+Can delete their own tasks
+
+Users cannot access or modify tasks created by other users.
+
+## 🔹 Admin User
+
+Can view all tasks from all users
+Can manage (update/delete) any task
+Has elevated privileges for monitoring and control
+
+Admin access is determined by the role field in the database.
+
+## 🔧 How To Make a User Admin (Using MongoDB Atlas)
+
+1) Login to MongoDB Atlas
+2) Go to your Cluster
+3) Click Browse Collections
+4) Open the users collection
+5) Find the desired user
+6) Edit the role field:
+##### change
+```
+{
+  "role": "user"
+}
+```
+##### to
+```
+{
+  "role": "admin"
+}
+```
+7) Save changes
+
+After this change, when the user logs in again, they will have admin privileges and will be able to view all tasks.
+
+## 📌 How It Works Internally
+
+The backend checks the user role from the JWT token after authentication.
+
+Example logic:
+
+If ```role === "admin"``` → return all tasks
+
+If ```role === "user"``` → return only tasks created by that user
+
+This ensures proper access control and data security
+
 ## Task Routes (Protected)
 
 ### All task routes require header:
